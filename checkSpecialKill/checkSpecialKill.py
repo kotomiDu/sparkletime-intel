@@ -1,12 +1,14 @@
 def checkSpecialKill(imgbox,imgname):
 	specialHightLight=[]
 	killway={
-		'killbox':'',
-		'grenadebox':'',
-		'smokebox':'',
-		'headshotbox':'',
-		'penetrationbox':'',
-		'cardiacbox':''
+		'kill':'',
+		'grenade':'',
+		'smoke':'',
+		'headshot':'',
+		'penetration':'',
+		'cardiac':'',
+		'nitro':'',
+		'airjab':''
 	}
 	for i , box in enumerate(imgbox):
 		pts = np.array(box).reshape((-1,1,2))
@@ -18,33 +20,44 @@ def checkSpecialKill(imgbox,imgname):
 			res_im = np.concatenate((padding_image, crop_im), axis=0)
 			cv2.imwrite("output/{}_text.png".format(imname),res_im)
 			if text == 'kill':
-				killway['killbox']= pts
+				killway['kill']= pts
 			elif text == 'smoke':
-				killway['smokebox'] = pts
+				killway['smoke'] = pts
 			elif text == 'grenade':
-				killway['grenadebox'] = pts
+				killway['grenade'] = pts
 			elif text == 'cardiac':
-				killway['cardiacbox'] = pts
+				killway['cardiac'] = pts
 			elif text == 'head':
-				killway['headshotbox']=pts
+				killway['headshot']=pts
 			elif text == 'penetration':
-				killway['penetrationbox']=pts
-		
-	if  killway['killbox']  is not '':
-		killpointy = int(killway['killbox'][0][0][1])
-		if  killway['grenadebox'] is not '':
-			if int( killway['grenadebox'][3][0][1])+20 > killpointy:
+				killway['penetration']=pts
+			elif text == 'nitro':
+				killway['nitro']=pts
+			elif text == 'airjab':
+				killway['airjab']=pts
+			
+	if  killway['kill']  is not '':
+		killpointy = int(killway['kill'][0][0][1])
+		if  killway['grenade'] is not '':
+			if int( killway['grenade'][3][0][1])+20 > killpointy:
 				specialHightLight.append('grenade')
-		if  killway['smokebox'] is not'':
-			if int( killway['smokebox'][3][0][1])+20 > killpointy:
+		if  killway['smoke'] is not'':
+			if int( killway['smoke'][3][0][1])+20 > killpointy:
 				specialHightLight.append('smoke')
-		if  killway['headshotbox'] is not'':
-			if int( killway['headshotbox'][3][0][1])+20 > killpointy:
+		if  killway['headshot'] is not'':
+			if int( killway['headshot'][3][0][1])+20 > killpointy:
 				specialHightLight.append('head')
-		if  killway['penetrationbox'] is not '':
-			if int( killway['penetrationbox'][3][0][1])+20 > killpointy:
+		if  killway['penetration'] is not '':
+			if int( killway['penetration'][3][0][1])+20 > killpointy:
 				specialHightLight.append('penetration')
-		if  killway['cardiacbox']  is not'':
-			specialHightLight.append('cardiac')
+		if killway['nitro'] is not '':
+			if int( killway['nitro'][3][0][1])+20 > killpointy:
+				specialHightLight.append('nitro')
+		if  killway['cardiac']  is not'':
+			if int( killway['cardiac'][0][0][1])> killpointy:
+				specialHightLight.append('cardiac')
+		if  killway['airjab']  is not'':
+			if int( killway['airjab'][0][0][1])> killpointy:
+				specialHightLight.append('airjab')
 	if len(specialHightLight) is not 0:
 		print('specialHightLight   ' + imgname + ':'+str(specialHightLight))
